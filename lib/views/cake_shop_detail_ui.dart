@@ -1,200 +1,329 @@
-import 'package:flutter/material.dart';
+// ignore_for_file: must_be_immutable, sort_child_properties_last
 
-class CakeShopDetailUi extends StatefulWidget {
-   CakeShopDetailUi({super.key});
+import 'package:flutter/material.dart';
+import 'package:flutter_cake_shop_project/models/cake_shop.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:flutter_map/flutter_map.dart';
+
+class CakeShopDetailUI extends StatefulWidget {
+  // สร้างตัวแปรมารับค่าข้อมูลร้านที่จะส่งมาจากหน้า ShopList
+  CakeShop? cakeShop;
+
+  //เอาตัวแปรที่สร้างมารับค่าที่จะส่งมาจากหน้า ShopList
+  CakeShopDetailUI({super.key, this.cakeShop});
 
   @override
-  State<CakeShopDetailUi> createState() => _CakeShopDetailUiState();
+  State<CakeShopDetailUI> createState() => _CakeShopDetailUIState();
 }
 
-class _CakeShopDetailUiState extends State<CakeShopDetailUi> {
+class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
+  // เมธอดโทร
+  Future<void> _makePhoneCall(String phoneNumber) async {
+    final launchUri = Uri(scheme: 'tel', path: phoneNumber);
+    await launchUrl(launchUri);
+  }
+
+  // เมธอดเปิดแอป เช่น Browser, Google Map, Facebook, Instagram, TikTok, ...
+  Future<void> _launchInBrowser(Uri url) async {
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $url');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      // ส่วนของ appBar
       appBar: AppBar(
         backgroundColor: Colors.red,
-        title:  Text(
-          'Larna House',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
         leading: IconButton(
-          icon:  Icon(Icons.arrow_back_ios, color: Colors.white),
           onPressed: () {
+            // ย้อนกลับไปหน้าก่อนหน้า
             Navigator.pop(context);
           },
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            color: Colors.white,
+          ),
+        ),
+        title: Text(
+          widget.cakeShop!.name!,
+          style: TextStyle(
+            color: Colors.white,
+          ),
         ),
         centerTitle: true,
       ),
-      body: ListView(
-        padding:  EdgeInsets.all(16.0),
-        children: [
-          Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                'assets/images/s41.jpg',
-                height: 120.0,
-                width: 150.0,
-                fit: BoxFit.cover,
-              ),
-            ),
+      // ส่วนของ body
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.only(
+            top: 50,
+            bottom: 50,
+            left: 45,
+            right: 45,
           ),
-           SizedBox(
-            height: 12.0
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  'assets/images/s42.jpg',
-                  height: 100.0,
-                  width: 120.0,
-                  fit: BoxFit.cover,
+          child: Center(
+            child: Column(
+              children: [
+                // แสดงรูปที่ 1 ของแต่ละร้าน
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset(
+                    widget.cakeShop!.image1!,
+                    width: MediaQuery.of(context).size.width * 0.3,
+                  ),
                 ),
-              ),
-               SizedBox(
-                width: 16.0
-              ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  'assets/images/s43.jpg',
-                  height: 100.0,
-                  width: 120.0,
-                  fit: BoxFit.cover,
+                SizedBox(
+                  height: 20,
                 ),
-              ),
-            ],
-          ),
-           SizedBox(
-            height: 24.0
-          ),
-          _buildInfoSection(
-            icon: '🏪',
-            title: 'ชื่อร้าน',
-            subtitle: 'Larna House',
-          ),
-          _buildInfoSection(
-            icon: '⏰',
-            title: 'เวลาเปิดปิด',
-            subtitle: 'ทุกวัน 09.00-21.00 น.',
-          ),
-          _buildInfoSection(
-            icon: '💬',
-            title: 'รายละเอียดร้าน',
-            subtitle: 'คิดถึงเค้กช็อกโกแลต ต้องคิดถึง Larna House เพราะร้านนี้มีจุดเด่นอยู่ที่เค้กช็อกโกแลตหน้านิ่มสูตรต้นตำรับจากสิงคโปร์ ที่คัดสรรวัตถุดิบอย่างดีจากแหล่งผลิตชั้นยอด ผสานความใส่ใจในทุกขั้นตอนและประสบการณ์ของทางร้านกว่า 20 ปีในการสร้างสรรค์เค้กวันเกิด ทำให้ได้เค้กที่มีรสชาติหอม นุ่มละมุน ชุ่มฉ่ำเนื้อช็อกโกแลตในทุกๆ คำ',
-          ),
-          _buildInfoSection(
-            icon: '🚩',
-            title: 'ที่อยู่ของร้าน',
-            subtitle: 'พัฒนาการ 61',
-          ),
-           SizedBox(
-            height: 16.0
-            ),
-          Center(
-            child: ElevatedButton.icon(
-              onPressed: () {},
-              icon:  Icon(Icons.phone, color: Colors.white),
-              label:  Text('023215995', style: TextStyle(color: Colors.white, fontSize: 16.0)),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                padding:  EdgeInsets.symmetric(horizontal: 32.0, vertical: 12.0),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-              ),
-            ),
-          ),
-           SizedBox(
-            height: 20.0
-          ),
-          _buildLinkRow(Icons.language, Colors.amber, 'https://larnahouse.com/'),
-           SizedBox(
-            height: 12.0
-          ),
-          _buildLinkRow(Icons.facebook, Colors.blue, 'https://facebook.com/%20larnahouse'),
-           SizedBox(
-            height: 24.0
-          ),
-
-          // ส่วนแผนที่จำลอง (Mockup Map)
-          Container(
-            height: 200.0,
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.grey.shade300),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.network(
-                'assets/images/map.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget _buildInfoSection({required String icon, required String title, required String subtitle}) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 16.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Text(
-                icon, 
-                style: TextStyle(
-                  fontSize: 18.0
-                  )
+                // แสดงรูปที่ 2 และ 3 ของแต่ละร้านในแนวนอน
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        widget.cakeShop!.image2!,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: Image.asset(
+                        widget.cakeShop!.image3!,
+                        width: MediaQuery.of(context).size.width * 0.3,
+                      ),
+                    ),
+                  ],
                 ),
-               SizedBox(
-                width: 8.0
+                SizedBox(
+                  height: 30,
                 ),
-              Text(
-                title,
-                style:  TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.black87),
-              ),
-            ],
-          ),
-           SizedBox(
-            height: 4.0
+                // แสดงชื่อร้าน
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'ชื่อร้าน 🏪',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.cakeShop!.name!,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                // แสดงเวลาเปิดปิด
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'เวลาเปิดปิด 🕒',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.cakeShop!.openCloseTime!,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                // แสดงรายละเอียดของร้าน
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'รายละเอียดของร้าน 📋',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.cakeShop!.description!,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                // แสดงรายละเอียดของร้าน
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'ที่อยู่ของร้าน📍',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    widget.cakeShop!.address!,
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                // แสดงปุ่มเบอร์โทร และให้โทรได้
+                ElevatedButton(
+                  onPressed: () {
+                    // เรียกใช้งานเมธอดโทร
+                    _makePhoneCall(widget.cakeShop!.phone!);
+                  },
+                  child: Text(
+                    // widget.cakeShop!.phone!,
+                    '📞  ${widget.cakeShop!.phone!}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    fixedSize: Size(
+                      MediaQuery.of(context).size.width * 0.45,
+                      50.5,
+                    ),
+                    backgroundColor: Colors.green,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                // แสดงเว็บไซต์ แล้วเปิดเว็บได้
+                ListTile(
+                  onTap: () {
+                    _launchInBrowser(
+                      Uri.parse(widget.cakeShop!.website!),
+                    );
+                  },
+                  leading: FaIcon(
+                    FontAwesomeIcons.globe,
+                    color: Colors.amber,
+                    size: 30,
+                  ),
+                  trailing: Icon(
+                    Icons.link,
+                  ),
+                  title: Text(
+                    widget.cakeShop!.website!,
+                  ),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                // แสดงfacebook แล้วเปิด facebook ได้
+                ListTile(
+                  onTap: () {
+                    _launchInBrowser(
+                      Uri.parse(widget.cakeShop!.facebook!),
+                    );
+                  },
+                  leading: FaIcon(
+                    FontAwesomeIcons.facebook,
+                    color: const Color.fromARGB(255, 17, 81, 178),
+                    size: 30,
+                  ),
+                  trailing: Icon(
+                    Icons.link,
+                  ),
+                  title: Text(
+                    widget.cakeShop!.facebook!,
+                  ),
+                ),
+                SizedBox(
+                  height: 30,
+                ),
+                // แสดงแผนที่ และ Marker แล้วเปิด Google Map ได้
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: FlutterMap(
+                    // กำหนดตำแหน่ง lat/lng และระยะ zoom ของแผนที่
+                    options: MapOptions(
+                      initialCenter: LatLng(
+                        double.parse(widget.cakeShop!.latitude!),
+                        double.parse(widget.cakeShop!.longitude!),
+                      ),
+                      initialZoom: 15.0,
+                    ),
+                    // กำหนด เลเยอร์ที่จะแสดงบนแผนที่ ประกอบด้วย แผนที่และ Marker
+                    children: [
+                      // แผนที่
+                      TileLayer(
+                        urlTemplate:
+                            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                        userAgentPackageName:
+                            'com.sau.flutter_cake_shop_project',
+                      ),
+                      // Marker
+                      MarkerLayer(
+                        markers: [
+                          Marker(
+                            point: LatLng(
+                              double.parse(widget.cakeShop!.latitude!),
+                              double.parse(widget.cakeShop!.longitude!),
+                            ),
+                            width: 50,
+                            height: 50,
+                            child: GestureDetector(
+                              onTap: () {
+                                //เปิด Google Map
+                                _launchInBrowser(
+                                  Uri.parse(
+                                    'https://www.google.com/maps/@${widget.cakeShop!.latitude},${widget.cakeShop!.longitude},15.55z',
+                                  ),
+                                );
+                              },
+                              child: FaIcon(
+                                FontAwesomeIcons.locationDot,
+                                color: Colors.red,
+                                size: 50,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          Padding(
-            padding:  EdgeInsets.only(left: 26.0),
-            key: ValueKey(title),
-            child: Text(
-              subtitle,
-              style: TextStyle(color: Colors.grey.shade700, fontSize: 14, height: 1.4),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-  Widget _buildLinkRow(IconData icon, Color iconColor, String url) {
-    return Row(
-      children: [
-        Icon(icon, color: iconColor, size: 24),
-         SizedBox(
-          width: 12.0,
-          ),
-        Expanded(
-          child: Text(
-            url,
-            style:  TextStyle(color: Colors.black87, fontSize: 14),
-            overflow: TextOverflow.ellipsis,
           ),
         ),
-        IconButton(
-          icon:  Icon(Icons.link, color: Colors.grey),
-          onPressed: () {},
-        ),
-      ],
+      ),
     );
   }
 }

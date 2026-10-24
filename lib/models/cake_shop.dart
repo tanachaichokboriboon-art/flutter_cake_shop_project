@@ -1,31 +1,29 @@
 class CakeShop {
-  // ตัวแปรที่ล้อกับรายละเอียดของข้อมูล
-  String? name;
-  String? address;
-  String? phone;
-  String? image1;
-  String? image2;
-  String? image3;
-  String? description;
-  String? openCloseTime;
-  String? website;
-  String? facebook;
-  String? latitude;
-  String? longitude;
- 
-  // ใช้เพื่อการกำหนดค่าให้กับรายละเอียดของข้อมูล
-  CakeShop({
-    this.name,
-    this.address,
-    this.phone,
-    this.image1,
-    this.image2,
-    this.image3,
-    this.description,
-    this.openCloseTime,
-    this.website,
-    this.facebook,
-    this.latitude,
-    this.longitude,
+  final String name;
+  final String address;
+  final String phone;
+  final String image1;
+  final String image2;
+  final String image3;
+  final String description;
+  final String openCloseTime;
+  final String website;
+  final String facebook;
+  final String latitude;
+  final String longitude;
+
+  const CakeShop({
+    required this.name,
+    required this.address,
+    required this.phone,
+    required this.image1,
+    required this.image2,
+    required this.image3,
+    required this.description,
+    required this.openCloseTime,
+    required this.website,
+    required this.facebook,
+    required this.latitude,
+    required this.longitude,
   });
 }

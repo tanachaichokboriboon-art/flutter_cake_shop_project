@@ -1,30 +1,63 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:flutter_cake_shop_project/main.dart';
+import 'package:flutter_cake_shop_project/views/cake_shop_list_ui.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('shop details show data for the selected shop', (
+    WidgetTester tester,
+  ) async {
+    final launchChannel = const MethodChannel('plugins.flutter.io/url_launcher');
+    final launchedUrls = <String>[];
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(launchChannel, (call) async {
+          launchedUrls.add((call.arguments as Map)['url'] as String);
+          return true;
+        });
+    addTearDown(
+      () => TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+          .setMockMethodCallHandler(launchChannel, null),
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await tester.pumpWidget(
+      MaterialApp(home: CakeShopListUi()),
+    );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    await tester.tap(find.text('Yellow Spoon Pastry'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Yellow Spoon Pastry'), findsNWidgets(2));
+    expect(find.text('0854822842'), findsOneWidget);
+    expect(
+      find.text('โครงการเอกมัย คอมเพล็กซ์ (ระหว่างเอกมัย 19 และ 21)'),
+      findsOneWidget,
+    );
+    expect(find.text('ทุกวัน 10.00-20.00 น.'), findsOneWidget);
+    expect(find.text('https://www.yellowspoonpastry.com/'), findsOneWidget);
+
+    await tester.tap(find.text('0854822842'));
+    await tester.pump();
+    await tester.tap(find.text('https://www.yellowspoonpastry.com/'));
+    await tester.pump();
+    await tester.tap(find.text('https://www.facebook.com/yspastry'));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(launchedUrls, [
+      'tel:0854822842',
+      'https://www.yellowspoonpastry.com/',
+      'https://www.facebook.com/yspastry',
+    ]);
+
+    await tester.tap(find.byIcon(Icons.arrow_back_ios));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Vista Cafe by Verasu'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Vista Cafe by Verasu'), findsNWidgets(2));
+    expect(find.text('022548100'), findsOneWidget);
+    expect(find.text('อาคารวีรสุ ถนนวิทยุ'), findsOneWidget);
+    expect(find.text('ทุกวัน 09.00-19.00 น'), findsOneWidget);
+    expect(find.text('http://vistacafe.co.th'), findsOneWidget);
+    expect(find.text('Yellow Spoon Pastry'), findsNothing);
   });
 }

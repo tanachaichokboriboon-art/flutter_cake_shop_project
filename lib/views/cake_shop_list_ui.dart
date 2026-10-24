@@ -13,7 +13,7 @@ class CakeShopListUi extends StatefulWidget {
 }
 
 class _CakeShopListUiState extends State< CakeShopListUi > {
-  List imageForCarouselSlider = [
+  final List<String> imageForCarouselSlider = [
     'assets/images/ck01.png',
     'assets/images/ck02.png',
     'assets/images/ck03.png',
@@ -23,7 +23,7 @@ class _CakeShopListUiState extends State< CakeShopListUi > {
     'assets/images/ck07.png',
   ];
 
-  List cakeShopData = [
+  final List<CakeShop> cakeShopData = [
    CakeShop(
      name: 'Yellow Spoon Pastry',
      address: 'โครงการเอกมัย คอมเพล็กซ์ (ระหว่างเอกมัย 19 และ 21)',
@@ -241,7 +241,7 @@ class _CakeShopListUiState extends State< CakeShopListUi > {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => CakeShopDetailUi(),
+                          builder: (context) => CakeShopDetailUI(cakeShop: shop),
                         ),
                       );
                     },
