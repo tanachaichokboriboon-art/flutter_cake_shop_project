@@ -1,4 +1,4 @@
-// ignore_for_file: must_be_immutable, sort_child_properties_last
+// ignore_for_file: sized_box_for_whitespace, must_be_immutable, sort_child_properties_last
 
 import 'package:flutter/material.dart';
 import 'package:flutter_cake_shop_project/models/cake_shop.dart';
@@ -49,7 +49,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
           ),
         ),
         title: Text(
-          widget.cakeShop!.name!,
+          widget.cakeShop!.name,
           style: TextStyle(
             color: Colors.white,
           ),
@@ -72,7 +72,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(10),
                   child: Image.asset(
-                    widget.cakeShop!.image1!,
+                    widget.cakeShop!.image1,
                     width: MediaQuery.of(context).size.width * 0.3,
                   ),
                 ),
@@ -86,7 +86,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        widget.cakeShop!.image2!,
+                        widget.cakeShop!.image2,
                         width: MediaQuery.of(context).size.width * 0.3,
                       ),
                     ),
@@ -96,7 +96,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(10),
                       child: Image.asset(
-                        widget.cakeShop!.image3!,
+                        widget.cakeShop!.image3,
                         width: MediaQuery.of(context).size.width * 0.3,
                       ),
                     ),
@@ -119,7 +119,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.cakeShop!.name!,
+                    widget.cakeShop!.name,
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -142,7 +142,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.cakeShop!.openCloseTime!,
+                    widget.cakeShop!.openCloseTime,
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -165,7 +165,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.cakeShop!.description!,
+                    widget.cakeShop!.description,
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -188,7 +188,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    widget.cakeShop!.address!,
+                    widget.cakeShop!.address,
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -201,11 +201,11 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                 ElevatedButton(
                   onPressed: () {
                     // เรียกใช้งานเมธอดโทร
-                    _makePhoneCall(widget.cakeShop!.phone!);
+                    _makePhoneCall(widget.cakeShop!.phone);
                   },
                   child: Text(
                     // widget.cakeShop!.phone!,
-                    '📞  ${widget.cakeShop!.phone!}',
+                    '📞  ${widget.cakeShop!.phone}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -226,7 +226,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                 ListTile(
                   onTap: () {
                     _launchInBrowser(
-                      Uri.parse(widget.cakeShop!.website!),
+                      Uri.parse(widget.cakeShop!.website),
                     );
                   },
                   leading: FaIcon(
@@ -238,7 +238,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                     Icons.link,
                   ),
                   title: Text(
-                    widget.cakeShop!.website!,
+                    widget.cakeShop!.website,
                   ),
                 ),
                 SizedBox(
@@ -248,7 +248,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                 ListTile(
                   onTap: () {
                     _launchInBrowser(
-                      Uri.parse(widget.cakeShop!.facebook!),
+                      Uri.parse(widget.cakeShop!.facebook),
                     );
                   },
                   leading: FaIcon(
@@ -260,7 +260,7 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                     Icons.link,
                   ),
                   title: Text(
-                    widget.cakeShop!.facebook!,
+                    widget.cakeShop!.facebook,
                   ),
                 ),
                 SizedBox(
@@ -274,8 +274,8 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                     // กำหนดตำแหน่ง lat/lng และระยะ zoom ของแผนที่
                     options: MapOptions(
                       initialCenter: LatLng(
-                        double.parse(widget.cakeShop!.latitude!),
-                        double.parse(widget.cakeShop!.longitude!),
+                        double.parse(widget.cakeShop!.latitude),
+                        double.parse(widget.cakeShop!.longitude),
                       ),
                       initialZoom: 15.0,
                     ),
@@ -293,8 +293,8 @@ class _CakeShopDetailUIState extends State<CakeShopDetailUI> {
                         markers: [
                           Marker(
                             point: LatLng(
-                              double.parse(widget.cakeShop!.latitude!),
-                              double.parse(widget.cakeShop!.longitude!),
+                              double.parse(widget.cakeShop!.latitude),
+                              double.parse(widget.cakeShop!.longitude),
                             ),
                             width: 50,
                             height: 50,
